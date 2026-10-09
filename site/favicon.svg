@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 5">
+  <!-- A Game of Life glider on the page's ink background. The leading cell is paper-white. -->
+  <rect width="5" height="5" rx="0.9" fill="#0e1013"/>
+  <path fill="#8cb7e0" d="M2.08 1.08h.84v.84h-.84zM1.08 3.08h.84v.84h-.84zM2.08 3.08h.84v.84h-.84zM3.08 3.08h.84v.84h-.84z"/>
+  <path fill="#eceae4" d="M3.08 2.08h.84v.84h-.84z"/>
+</svg>

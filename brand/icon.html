@@ -1,0 +1,29 @@
+<!doctype html>
+<!--
+  Renders the glider icon for export.sh at ?size=<px>, pinned to the top-left corner (headless Chrome
+  has a minimum window size, so the icon can't rely on 100vw). ?square=1 drops the rounded corners,
+  because iOS rounds apple-touch-icon.png itself and transparent corners would show up black.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; background: #0e1013; overflow: hidden; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<svg viewBox="0 0 5 5" xmlns="http://www.w3.org/2000/svg">
+  <rect id="tile" width="5" height="5" rx="0.9" fill="#0e1013"/>
+  <path fill="#8cb7e0" d="M2.08 1.08h.84v.84h-.84zM1.08 3.08h.84v.84h-.84zM2.08 3.08h.84v.84h-.84zM3.08 3.08h.84v.84h-.84z"/>
+  <path fill="#eceae4" d="M3.08 2.08h.84v.84h-.84z"/>
+</svg>
+<script>
+  const params = new URLSearchParams(location.search)
+  const svg = document.querySelector("svg")
+  svg.setAttribute("width", params.get("size") || "512")
+  svg.setAttribute("height", params.get("size") || "512")
+  if (params.get("square")) document.getElementById("tile").setAttribute("rx", "0")
+</script>
+</body>
+</html>

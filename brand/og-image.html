@@ -1,0 +1,85 @@
+<!doctype html>
+<!--
+  The link-preview image (Open Graph), 1200 × 630. export.sh screenshots this into site/og.png.
+  A still frame of the hero: a seeded Game of Life soup run forward 40 generations and colored by
+  age, under the wordmark. Same seed, same picture, every export.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "Geist"; src: url("../site/fonts/Geist-Variable.woff2") format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: "Geist Mono"; src: url("../site/fonts/GeistMono-Variable.woff2") format("woff2"); font-weight: 100 900; }
+  html, body { margin: 0; }
+  .card { position: relative; width: 1200px; height: 630px; overflow: hidden; background: #0e1013; color: #eceae4; font-family: Geist, sans-serif; }
+  canvas { position: absolute; inset: 0; }
+  .fade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,16,19,0.1) 0%, rgba(14,16,19,0.25) 35%, rgba(14,16,19,0.88) 70%, #0e1013 100%); }
+  .label { position: absolute; top: 60px; right: 72px; font-family: "Geist Mono", monospace; font-size: 22px; color: #a3a6ac; }
+  .words { position: absolute; left: 72px; right: 72px; bottom: 64px; }
+  .title { font-size: 168px; font-weight: 800; letter-spacing: -0.05em; line-height: 0.9; }
+  .tagline { margin-top: 26px; font-size: 34px; color: #b4b7bd; }
+</style>
+</head>
+<body>
+<div class="card">
+  <canvas id="field" width="1200" height="630"></canvas>
+  <div class="fade"></div>
+  <div class="label">a digital lab</div>
+  <div class="words">
+    <div class="title">Twin Cliffs</div>
+    <div class="tagline">A digital lab for tinkering, experimentation, and sharing.</div>
+  </div>
+</div>
+<script>
+  const canvas = document.getElementById("field")
+  const ctx = canvas.getContext("2d")
+  const cell = 12
+  const cols = Math.ceil(canvas.width / cell)
+  const rows = Math.ceil(canvas.height / cell)
+
+  // mulberry32: a tiny seeded random number generator, so every export draws the same field
+  let seed = 7
+  const random = () => {
+    seed = (seed + 0x6d2b79f5) | 0
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+
+  let cells = new Uint8Array(cols * rows)
+  const ages = new Uint16Array(cols * rows)
+  for (let i = 0; i < cells.length; i++) if (random() < 0.16) { cells[i] = 1; ages[i] = 6 }
+
+  for (let generation = 0; generation < 40; generation++) {
+    const next = new Uint8Array(cells.length)
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        let neighbors = 0
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+          if (dx || dy) neighbors += cells[((y + dy + rows) % rows) * cols + ((x + dx + cols) % cols)]
+        }
+        const i = y * cols + x
+        if (neighbors === 3 || (neighbors === 2 && cells[i])) { next[i] = 1; ages[i] = cells[i] ? ages[i] + 1 : 0 }
+        else ages[i] = 0
+      }
+    }
+    cells = next
+  }
+
+  const settled = [38, 42, 49]
+  const accent = [140, 183, 224]
+  ctx.fillStyle = "#0e1013"
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      const i = y * cols + x
+      if (!cells[i]) continue
+      const t = Math.min(ages[i], 9) / 9
+      const rgb = accent.map((a, j) => Math.round(settled[j] + (a - settled[j]) * 0.8 * (1 - t)))
+      ctx.fillStyle = `rgb(${rgb.join(",")})`
+      ctx.fillRect(x * cell + 1, y * cell + 1, cell - 2, cell - 2)
+    }
+  }
+</script>
+</body>
+</html>
