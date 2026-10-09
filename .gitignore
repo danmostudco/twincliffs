@@ -1,0 +1,5 @@
+# Compiled by the Docker build (src/app.css → site/css/app.css)
+site/css/
+
+.bundle/
+.DS_Store

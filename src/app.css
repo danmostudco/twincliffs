@@ -1,0 +1,38 @@
+/*
+  Tailwind input. The Docker build compiles it to site/css/app.css.
+
+  source(none) turns off Tailwind's automatic scan, which anchors at the nearest .git and finds
+  nothing inside the Docker build. The @source lines name exactly what to scan.
+*/
+@import "tailwindcss" source(none);
+@source "../site/**/*.html";
+@source "../site/js";
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  --color-ink: #0e1013;    /* page background */
+  --color-paper: #eceae4;  /* primary text */
+  --color-soft: #b4b7bd;   /* tagline */
+  --color-muted: #a3a6ac;  /* secondary text */
+  --color-line: #23272d;   /* hairlines */
+  --color-accent: #8cb7e0; /* links, new Game of Life cells */
+  --color-salmon: #f26d7d;
+  --color-water-deep: #3b4149;
+  --color-water-surface: #5e6b7a;
+}

@@ -1,0 +1,106 @@
+# Twin Cliffs
+
+The front door at twincliffs.com: one static page that brands Twin Cliffs as a digital lab for
+tinkering and links to featured projects.
+
+## Project Profile
+
+| Dimension | Selection |
+|---|---|
+| Auth tier | C: open |
+| Domain layer | The platform domain's apex, `twincliffs.com`. DNS shaped like Layer 1 (apex + www redirect), no delegation |
+| URL | https://twincliffs.com |
+| Admin console | no |
+| Sends email | no |
+| Data loss tolerance | nothing to lose — no data, no volume; the repo rebuilds everything |
+| Spec | `🏗 Projects/Twincliffs Home Page/` in the vault (`decisions.md`, `todo.md`, `setup_log.md`) |
+
+**What this profile means:** static files only. No server code, no database, no secrets. If
+something needs to run code (the planned contact form), it goes to a cloud function, not this
+container. Decided 2026-10-09; see the vault's `decisions.md`.
+
+## Stack
+
+Plain HTML · Tailwind v4 via its standalone CLI (compiled in the Docker build, no Node) · Stimulus
+3, vendored as one ES module (no bundler, no importmap gem) · Geist and Geist Mono, self-hosted ·
+nginx (`nginx:stable-alpine`) · Kamal with its **local registry**.
+
+```
+site/                    everything nginx serves
+  index.html, 404.html
+  js/application.js      starts Stimulus
+  js/controllers/        life_controller.js (Game of Life hero) · river_controller.js (salmon)
+  vendor/stimulus.js     @hotwired/stimulus 3.2.2
+  fonts/                 Geist variable fonts (SIL OFL, see OFL.txt)
+src/app.css              Tailwind input → compiled to site/css/app.css during the Docker build
+nginx.conf               /up health check, cache headers, 404 page
+Dockerfile               stage 1 Tailwind CLI · stage 2 nginx
+config/deploy.yml        Kamal: no volumes, no env, local registry
+```
+
+## Common Commands
+
+```bash
+docker build --platform linux/amd64 -t twincliffs . && docker run --rm -p 8080:80 twincliffs   # local preview at :8080
+bin/kamal deploy         # COMMIT FIRST — images are tagged by commit hash. Docker must be running.
+bin/kamal app logs
+```
+
+There's no local dev server. The page is plain files, but the CSS only exists after the Tailwind
+step, so preview through the container.
+
+## Domain
+
+⚠️ **`www` works, and nothing in this repo makes it work.** It's a Cloudflare Redirect Rule: the
+apex is gray-clouded, www is proxied (orange) and redirects 301 to the apex. See the vault's
+`🚀 Shipping/Recipes/DOMAIN-LAYER-1.md` Step 3.
+
+## Recorded decisions
+
+Full reasoning is in the vault's `decisions.md`. The short version:
+
+- **No Rails — decided 2026-10-09.** No server-side job. A Rails container costs 200–400 MB of a
+  droplet that holds 2–3 Rails apps; nginx serving files needs about 10 MB.
+- **nginx (gauntlet).** (1) *With what we have?* A Tier C Rails app with Thruster would work, but
+  Thruster only exists inside Rails, and kamal-proxy routes requests without serving files.
+  (2) *What makes that prohibitive?* Nothing is prohibitive; the cost is ~300 MB of RAM and a Rails
+  app's upkeep for zero server-side work. (3) *Migrating off:* nothing to migrate. The content is
+  plain files any static host can serve. nginx has served static files since 2004.
+- **Tailwind standalone CLI (gauntlet).** Tailwind is already on the roster; `tailwindcss-rails`
+  wraps this same binary. Migrating off means deleting one Dockerfile stage and committing the
+  compiled CSS. The version in the Dockerfile is there because the download URL needs one. Bump it
+  deliberately.
+- **Kamal's local registry — decided 2026-10-09.** `registry: server: localhost:5555`. Kamal runs a
+  `registry:3` container on the Mac and the droplet pulls through an SSH tunnel, so there's no
+  Docker Hub repo or token. This app is the platform's first use of it.
+- **Jekyll waits for the first `/journal` post.** It passes plain HTML through unchanged, so adding
+  it later costs almost nothing.
+- **Contact form → a cloud function, later.** Never on this droplet. Next steps are in the vault's
+  `todo.md`.
+
+## Gotchas specific to this app
+
+- **Tailwind scans only what `src/app.css` names** (`source(none)` + `@source`). A new folder of
+  HTML or JS that uses classes must be added there, or its classes silently won't exist.
+- **CSS and JS aren't fingerprinted, so they're served `no-cache`** (revalidated on every load; a
+  304 when unchanged). An earlier one-hour cache served stale ES modules even through a hard reload.
+  Only `/fonts/` is cached long-term, so **rename a font file if you ever replace it.**
+- **Animation code lives in the two Stimulus controllers.** The visual values (cell size, speed,
+  colors) are Stimulus `values` with defaults in `life_controller.js`; override them with
+  `data-life-*-value` attributes in the HTML rather than editing the defaults.
+
+## Working Style
+
+- **Get to prod fast:** smallest working slice, deploy, share, iterate.
+- **Readable over clever.** Plain HTML, small controllers, comments that say why.
+- **Don't add dependencies casually.** Anything new owes the gauntlet in the vault's
+  `🚀 Shipping/01-PHILOSOPHY.md`, written here.
+- **End of session: did anything here prove a vault doc wrong, or teach something worth keeping?**
+  Fix contradictions in that doc now, update its stamp, and run `🚀 Shipping/check-docs.sh`. For new
+  material, suggest a home per `🚀 Shipping/README.md` § *"document this"* and confirm with Dan.
+
+## Vault references
+
+- Project folder: `🏗 Projects/Twincliffs Home Page/` — decisions, todo, setup log
+- Platform facts: `🚀 Shipping/02-PLATFORM.md` · Build & deploy: `🚀 Shipping/06-BUILD-AND-DEPLOY.md`
+- Vault: `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/MorrisonInc/`

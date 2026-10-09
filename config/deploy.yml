@@ -1,0 +1,25 @@
+# twincliffs.com — the front door. Static files served by nginx; see CLAUDE.md.
+service: twincliffs
+image: twincliffs
+
+servers:
+  web:
+    - 157.245.217.160 # the shared droplet — 🚀 Shipping/02-PLATFORM.md § Platform facts
+
+proxy:
+  ssl: true
+  host: twincliffs.com
+  app_port: 80
+  healthcheck:
+    path: /up
+
+# Kamal's local registry: the image is pushed to a registry container on this Mac and the droplet
+# pulls it through an SSH tunnel. Private and free, with no Docker Hub account or token.
+# Deploys need Docker running on this Mac.
+registry:
+  server: localhost:5555
+
+builder:
+  arch: amd64
+
+# No volumes, no env, no secrets: there is nothing to persist and nothing private.

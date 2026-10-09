@@ -1,0 +1,5 @@
+# Only what the image needs. Everything else (git, Kamal config, docs) stays out.
+*
+!src
+!site
+!nginx.conf

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Twin Cliffs — a digital lab</title>
+  <meta name="description" content="A digital lab for tinkering, experimentation, and sharing.">
+  <meta name="theme-color" content="#0e1013">
+  <meta name="color-scheme" content="dark">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://twincliffs.com/">
+  <meta property="og:title" content="Twin Cliffs">
+  <meta property="og:description" content="A digital lab for tinkering, experimentation, and sharing.">
+
+  <link rel="preload" href="/fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/app.css">
+  <script type="module" src="/js/application.js"></script>
+</head>
+<body class="bg-ink font-sans text-paper antialiased">
+  <!-- Hero: the Game of Life runs behind the headline and fades into the page. -->
+  <section data-controller="life" class="relative h-[min(600px,calc(300px+36vw))] overflow-hidden">
+    <canvas data-life-target="canvas" data-action="pointerdown->life#seed" aria-hidden="true"
+            class="absolute inset-0 block size-full cursor-crosshair touch-manipulation"></canvas>
+    <div aria-hidden="true"
+         class="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgb(14_16_19/0.15)_0%,rgb(14_16_19/0.15)_25%,rgb(14_16_19/0.82)_72%,#0e1013_100%)]"></div>
+
+    <div class="pointer-events-none absolute inset-0 flex flex-col justify-between">
+      <header class="mx-auto flex w-full max-w-[1280px] justify-between gap-4 p-6 font-mono text-[13px] text-muted">
+        <span class="text-paper">Twin Cliffs</span>
+        <span>a digital lab</span>
+      </header>
+
+      <div class="mx-auto w-full max-w-[1280px] px-6 pb-10">
+        <h1 class="text-[clamp(64px,13vw,150px)] leading-[0.9] font-extrabold tracking-[-0.05em]">Twin Cliffs</h1>
+        <p class="mt-7 max-w-[560px] text-[clamp(18px,2vw,22px)] leading-[1.45] text-pretty text-soft">
+          A digital lab for tinkering, experimentation, and sharing.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <main class="mx-auto max-w-[1280px] px-6 pt-14">
+    <section aria-labelledby="featured">
+      <h2 id="featured" class="border-b border-line pb-3 font-mono text-xs tracking-[0.12em] text-muted uppercase">
+        Featured projects
+      </h2>
+
+      <article class="flex flex-wrap items-center gap-x-14 gap-y-5 border-b border-line py-10">
+        <div class="flex min-w-0 flex-[0_1_460px] flex-col gap-4">
+          <h3 class="text-[clamp(40px,4.6vw,64px)] leading-none font-bold tracking-[-0.04em]">Fat Bear Bracket</h3>
+          <p class="max-w-[460px] text-lg leading-normal text-muted">
+            A bracket pool application for Katmai Park's Fat Bear Week. Win points by prognosticating
+            which bears will advance in the single-elimination tournament.
+          </p>
+          <a href="https://fatbearbracket.com" class="py-2 font-mono text-sm text-accent hover:text-paper">fatbearbracket.com ↗</a>
+        </div>
+
+        <!-- Salmon leaping out of an ASCII river. Three stacked layers, one color each. -->
+        <div data-controller="river" aria-hidden="true"
+             class="relative max-w-full flex-[0_1_auto] overflow-hidden font-mono text-[clamp(9px,2.45vw,13px)] leading-[1.25]">
+          <pre data-river-target="deep" class="[font:inherit] text-water-deep"></pre>
+          <pre data-river-target="surface" class="absolute inset-0 [font:inherit] text-water-surface"></pre>
+          <pre data-river-target="fish" class="absolute inset-0 [font:inherit] text-salmon"></pre>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="mx-auto flex max-w-[1280px] flex-wrap justify-between gap-3 px-6 pt-24 pb-10 font-mono text-[13px] text-muted">
+    <span>Made by <a href="https://www.linkedin.com/in/dan-morrison-380ba379" class="text-paper hover:text-accent">Dan</a></span>
+    <a href="mailto:support@twincliffs.com" class="text-paper hover:text-accent">support@twincliffs.com</a>
+  </footer>
+</body>
+</html>
