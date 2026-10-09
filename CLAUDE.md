@@ -109,5 +109,7 @@ Full reasoning is in the vault's `decisions.md`. The short version:
 ## Vault references
 
 - Project folder: `🏗 Projects/Twincliffs Home Page/` — decisions, todo, setup log
-- Platform facts: `🚀 Shipping/02-PLATFORM.md` · Build & deploy: `🚀 Shipping/06-BUILD-AND-DEPLOY.md`
+- **How this site was built, as a reusable recipe:** `🚀 Shipping/Recipes/STATIC-SITE.md`
+- Platform facts: `🚀 Shipping/02-PLATFORM.md` · Build & deploy: `🚀 Shipping/06-BUILD-AND-DEPLOY.md` (§0, §6–§8 apply)
+- The local registry, explained: `🚀 Shipping/02-PLATFORM.md` § The local registry
 - Vault: `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/MorrisonInc/`
