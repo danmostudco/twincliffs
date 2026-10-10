@@ -84,7 +84,7 @@ Full reasoning is in the vault's `decisions.md`. The short version:
 
 - **Icons and the link-preview image are generated.** Edit `brand/icon.html` or `brand/og-image.html`,
   then run `zsh brand/export.sh` (headless Chrome + `sips`, nothing to install) and commit the outputs in
-  `site/`. Keep the preview image under ~300 KB, and give it a new filename (og-3.png…) each time it changes for WhatsApp. Chat apps cache previews per URL; LinkedIn's Post
+  `site/`. Keep the preview image under ~300 KB for WhatsApp, and give it a new filename (og-3.png…) each time it changes. Chat apps cache previews per URL; LinkedIn's Post
   Inspector and Facebook's Sharing Debugger force a refresh.
 
 - **Tailwind scans only what `src/app.css` names** (`source(none)` + `@source`). A new folder of
