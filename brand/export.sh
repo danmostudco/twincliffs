@@ -17,7 +17,8 @@ shoot() { # shoot <url> <width> <height> <output.png>
 icon="file://$PWD/brand/icon.html"
 
 # Link preview, 1200 × 630
-shoot "file://$PWD/brand/og-image.html" 1200 630 site/og.png
+# New filename whenever the image changes: chat apps cache previews per image URL.
+shoot "file://$PWD/brand/og-image.html" 1200 630 site/og-2.png
 
 # iPhone home screen and iMessage/WhatsApp fallback icon. Square corners: iOS rounds it.
 shoot "$icon?square=1&size=180" 180 180 site/apple-touch-icon.png
@@ -27,4 +28,4 @@ shoot "$icon?size=32" 32 32 "$work/favicon-32.png"
 sips -s format ico "$work/favicon-32.png" --out site/favicon.ico >/dev/null
 
 rm -rf "$work"
-ls -l site/og.png site/apple-touch-icon.png site/favicon.ico site/favicon.svg
+ls -l site/og-2.png site/apple-touch-icon.png site/favicon.ico site/favicon.svg

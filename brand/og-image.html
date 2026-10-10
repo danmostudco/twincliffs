@@ -1,8 +1,9 @@
 <!doctype html>
 <!--
-  The link-preview image (Open Graph), 1200 × 630. export.sh screenshots this into site/og.png.
+  The link-preview image (Open Graph), 1200 × 630. export.sh screenshots this into site/og-2.png.
   A still frame of the hero: a seeded Game of Life soup run forward 40 generations and colored by
-  age, under the wordmark. Same seed, same picture, every export.
+  age, fading toward the bottom. Deliberately almost text-free: chat apps print the title,
+  description and domain under the image, so it only says "a digital lab". Same seed, same picture.
 -->
 <html lang="en">
 <head>
@@ -14,21 +15,17 @@
   .card { position: relative; width: 1200px; height: 630px; overflow: hidden; background: #0e1013; color: #eceae4; font-family: Geist, sans-serif; }
   canvas { position: absolute; inset: 0; }
   .fade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,16,19,0.1) 0%, rgba(14,16,19,0.25) 35%, rgba(14,16,19,0.88) 70%, #0e1013 100%); }
+  /* a soft dark patch so the corner label reads over the cells */
+  .label-shade { position: absolute; inset: 0; background: radial-gradient(ellipse 260px 120px at 1040px 75px, rgba(14,16,19,0.92) 0%, rgba(14,16,19,0.75) 45%, rgba(14,16,19,0) 100%); }
   .label { position: absolute; top: 60px; right: 72px; font-family: "Geist Mono", monospace; font-size: 22px; color: #a3a6ac; }
-  .words { position: absolute; left: 72px; right: 72px; bottom: 64px; }
-  .title { font-size: 168px; font-weight: 800; letter-spacing: -0.05em; line-height: 0.9; }
-  .tagline { margin-top: 26px; font-size: 34px; color: #b4b7bd; }
 </style>
 </head>
 <body>
 <div class="card">
   <canvas id="field" width="1200" height="630"></canvas>
   <div class="fade"></div>
+  <div class="label-shade"></div>
   <div class="label">a digital lab</div>
-  <div class="words">
-    <div class="title">Twin Cliffs</div>
-    <div class="tagline">A digital lab for tinkering, experimentation, and sharing.</div>
-  </div>
 </div>
 <script>
   const canvas = document.getElementById("field")
